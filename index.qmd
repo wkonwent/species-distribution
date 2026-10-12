@@ -59,7 +59,8 @@ knitr::knit_hooks$set(
 
 # Motivation
 
-This document contains code chunks to help you understanding the course. Don't hesitate to modify them, add your own notes and code.
+This document contains code chunks to help you understanding the course.
+Don't hesitate to modify them, add your own notes and code.
 
 It comes with a practical you will run at home (`Biodiv-Practical.Rmd`).
 
@@ -69,7 +70,11 @@ It comes with a practical you will run at home (`Biodiv-Practical.Rmd`).
 
 ### Preston diagram
 
-Using the vegan package, we can access the BCI data. The data is 50 rows representing 50 plots, and each species with a number of individuals \>10cm of that species per plot. For our purposes we will combine all the plots to obtain species totals over 50 hectares (with a total number of trees = 21,457, and per hectare = 429). There are 600 trees/ha in Paracou (also they're smaller). The distribution is Gaussian (normal) and must be logged cause there is sooo many trees with very few individuals.
+Using the vegan package, we can access the BCI data.
+The data is 50 rows representing 50 plots, and each species with a number of individuals \>10cm of that species per plot.
+For our purposes we will combine all the plots to obtain species totals over 50 hectares (with a total number of trees = 21,457, and per hectare = 429).
+There are 600 trees/ha in Paracou (also they're smaller).
+The distribution is Gaussian (normal) and must be logged cause there is sooo many trees with very few individuals.
 
 ```{r}
 library("tidyverse")
@@ -87,7 +92,8 @@ BCI_50ha_abd %>%
 
 Probability densities
 
-Ok then we make a smoothed version to more clearly see the pattern vs the histogram. This is not technically a Preston diagram - it's a probablility density
+Ok then we make a smoothed version to more clearly see the pattern vs the histogram.
+This is not technically a Preston diagram - it's a probablility density
 
 ```{r}
 BCI_50ha_abd %>% 
@@ -100,7 +106,8 @@ BCI_50ha_abd %>%
 
 ### Whittaker diagram
 
-Preferred diagram! Shows number of species of different types of abundances
+Preferred diagram!
+Shows number of species of different types of abundances
 
 ```{r}
 library("divent")
@@ -112,7 +119,8 @@ BCI_50ha_abd %>%
 
 ## Broken stick
 
-Random distributions are created by `divent::rxxx()`functions. Rcommunity is used to random communities of individuals
+Random distributions are created by `divent::rxxx()`functions.
+Rcommunity is used to random communities of individuals
 
 ```{r}
 rcommunity(
@@ -131,7 +139,12 @@ rcommunity(
 
 ## Geometric
 
-Random distribution. Only shows to \~70 species cause all the others have less than 1 (so 0) individuals out of 10,000. Increasing the number of trees would show us more species. Though it should theoretically be a straight line, it is not because of integers. Not used very often cause you need A LOT of individuals. Used most often for soil microbes.
+Random distribution.
+Only shows to \~70 species cause all the others have less than 1 (so 0) individuals out of 10,000.
+Increasing the number of trees would show us more species.
+Though it should theoretically be a straight line, it is not because of integers.
+Not used very often cause you need A LOT of individuals.
+Used most often for soil microbes.
 
 ```{r}
 rcommunity(
@@ -173,7 +186,9 @@ Modify the standard deviation.
 
 ## Log-series
 
-The gamma function, which shows lots of species with few individuals, some species with a few more, and very few species with many individuals. K = 1 (shape = 1) is what makes it gamma. According to Fisher, it should be very close to 0.
+The gamma function, which shows lots of species with few individuals, some species with a few more, and very few species with many individuals.
+K = 1 (shape = 1) is what makes it gamma.
+According to Fisher, it should be very close to 0.
 
 ```{r}
 ggplot() +
@@ -184,7 +199,8 @@ ggplot() +
   )
 ```
 
-Random distribution. Used for metacommunities
+Random distribution.
+Used for metacommunities
 
 ```{r}
 rcommunity(
@@ -226,7 +242,9 @@ comm_large_lnorm %>%
   autoplot()
 ```
 
-Sample it. Basically, denote something as a local community. To use the abundance, use abd and insert a vector.
+Sample it.
+Basically, denote something as a local community.
+To use the abundance, use abd and insert a vector.
 
 ```{r}
 # Draw 3000 trees from the large community
@@ -256,7 +274,9 @@ autoplot(comm_lnorm, fit_rac = TRUE, distribution = "lnorm")
 fit_rac(comm_lnorm, distribution = "lnorm") 
 ```
 
-BCI example. Doesn't fit as well as simulated data, cause simulated data always fits more exactly than observed data. Can try it with different types of distributions to see which one fits best (hint, it's log normal).
+BCI example.
+Doesn't fit as well as simulated data, cause simulated data always fits more exactly than observed data.
+Can try it with different types of distributions to see which one fits best (hint, it's log normal).
 
 ```{r}
 BCI_50ha_abd %>% 
@@ -267,7 +287,10 @@ BCI_50ha_abd %>%
 
 ## Zero-sum multinomial distribution
 
-BCI parameters $\theta$ and $m$ are estimated following @etienne2005 with the untb package. This code chunk has a lot of bugs and issues cause the data are toooo big. still runable, by bypassing the bugs and just re-downloading the data. Remember that $\theta$ is equal to $\alpha$ !
+BCI parameters $\theta$ and $m$ are estimated following @etienne2005 with the untb package.
+This code chunk has a lot of bugs and issues cause the data are toooo big.
+still runable, by bypassing the bugs and just re-downloading the data.
+Remember that $\theta$ is equal to $\alpha$ !
 
 ```{r}
 #| label: bci_params
@@ -302,7 +325,11 @@ BCI_50ha %>%
   BCI_params
 ```
 
-The distribution of the local community is derived. $J$ is that of BCI and $m$ was estimated previously. Here we run a simulated version of the local BCI data, based on the metacommunity BCI data, with a line on top as the observed data. This is just a longer by hand version of simulating a distribution that exactly fits the neutral model. Can instead just run the previous plain BCI log normal distribution
+The distribution of the local community is derived.
+$J$ is that of BCI and $m$ was estimated previously.
+Here we run a simulated version of the local BCI data, based on the metacommunity BCI data, with a line on top as the observed data.
+This is just a longer by hand version of simulating a distribution that exactly fits the neutral model.
+Can instead just run the previous plain BCI log normal distribution
 
 ```{r}
 #| label: bci_sim_code
@@ -372,9 +399,13 @@ arrange(desc(abundance))
 
 ## Accumulation of subplots
 
-Accumulate subplots in random order (Monte-Carlo). Plot the expectation and the confidence interval of the number of species with respect to the number of samples.
+Accumulate subplots in random order (Monte-Carlo).
+Plot the expectation and the confidence interval of the number of species with respect to the number of samples.
 
-The function specaccum is a function from package vegan. It calculates row by row (plots) not by tree. Eric doesn't seem to like this much. prefers the other function.
+The function specaccum is a function from package vegan.
+It calculates row by row (plots) not by tree.
+Eric doesn't seem to like this much.
+prefers the other function.
 
 ```{r}
 BCI %>% 
@@ -386,9 +417,16 @@ BCI %>%
 
 Compute the expected accumulation curve of BCI up to twice the sampling effort, with its confidence interval.
 
-Calculate the number of trees in BCI - simple and veeeery useful. Then we use the div_richness to estimate how many species we should have per this many trees. Then we make the smoothed curve for up to double our sample size, and we're only choosing every 10th trees, to cut the comp time. We only run 10 simulations, so it's not very precise. We would need to run 1000 simulations to have a good estimation
+Calculate the number of trees in BCI - simple and veeeery useful.
+Then we use the div_richness to estimate how many species we should have per this many trees.
+Then we make the smoothed curve for up to double our sample size, and we're only choosing every 10th trees, to cut the comp time.
+We only run 10 simulations, so it's not very precise.
+We would need to run 1000 simulations to have a good estimation
 
-The graph: vertical line shows true number of individuals observed. confidence interval narrows further along the end. smoothing is not very clean, needs fixed. Shows what the kind of ideal sample size is in order for the data to be reliable.
+The graph: vertical line shows true number of individuals observed.
+confidence interval narrows further along the end.
+smoothing is not very clean, needs fixed.
+Shows what the kind of ideal sample size is in order for the data to be reliable.
 
 ```{r}
 # Number of trees in BCI
@@ -410,6 +448,12 @@ BCI_all %>%
 # Canonical lognormal
 
 ggplot seems to bug with weighted, bounded density and log scale.
+First we find the most abundant value (the max number of trees per species).
+then we plot and bound is to 0.
+And then we do another plot of number of species.
+and overlap the.
+these give us our two curves for a canonical lognormal.
+but the species curve doesn't look lognormal
 
 ```{r}
 # Most adundant species
@@ -431,6 +475,8 @@ BCI_50ha_abd %>%
 ```
 
 Correct curves.
+This time with log abundance, and boundary for number of species (maximum).
+this includes weighting the probability - cause obviously you have a higher probability of being an individual of the most abundant species.
 
 ```{r}
 library("GoFKernel")
@@ -454,11 +500,15 @@ abline(v = max(log10(BCI_50ha_abd)), lty = 2)
 
 ```
 
+# Biodiversity
+
 # Richness
 
 ## Dummy communities
 
 Build dummy communities.
+4 communities with 2 species each, and weight = total abundance.
+conclusion: the relative abundance of the species doesn't change the richness.
 
 ```{r}
 tibble(
@@ -471,12 +521,20 @@ tibble(
 ```
 
 Sample richness.
+use function div_richness to calculate richness.
+estimator is how you will calculate the estimator.
+naive is just the count of species.
+single species = 1, cause there's only one species due
 
 ```{r}
 div_richness(comm_dummy, estimator = "naive")
 ```
 
 Asymptotic richness.
+same formula but without IDing estimator.
+so it automatically chooses the best one for the data.
+you can use estimator = Chao1 if u really want to.
+jacknife0 = naive.
 
 ```{r}
 div_richness(comm_dummy)
@@ -488,23 +546,38 @@ Prepare the data: gather the four subplots.
 
 ```{r}
 paracou_6_abd %>% 
-  # Gather all sites
+  # Gather all sites - groups all the subplots into a metacommunity
   metacommunity() %>% 
-  # Rename "matacommunity"
+  # Rename "metacommunity"
   mutate(site = "Paracou 6") ->
   p6_abundances
 autoplot(p6_abundances)
 ```
 
 Abundance frequencies.
+abd_freq_count tells us the real values on the plot - so how many singletons/doubletons/etc there actually are.
+can also check the reverse, and read the abundances
 
 ```{r}
 p6_abundances %>% 
   as.numeric() %>% 
   abd_freq_count()
+
+#OR, to see the abundances per species
+p6_abundances %>% 
+  as.numeric() %>% 
+  abd_freq_count() %>% 
+  arrange(desc(abundance))
 ```
 
-Estimators of richness.
+Estimators of richness, using different kinds of estimators.
+naive is the true number of species observed.
+the estimator then allows us to estimate how many species there are max, assuming that we cannot sample everything and can estimate instead.
+these data are a bit odd - potentially there are too many doubletons and not enough singletons.
+the approved number is jack1, so 433.
+which is why we have to set the jack_max.
+at this stage, all these estimators ( not naive) can be considered similarly.
++ 100 +/- 10 and that's as good as it's gonna get.
 
 ```{r}
 div_richness(p6_abundances, estimator = "naive") %>% 
@@ -518,9 +591,12 @@ div_richness(p6_abundances, estimator = "naive") %>%
 ## Interpolation / extrapolation
 
 Diversity of 1 ha in Paracou.
+Tells us how many trees are in one 1ha (level, must be an integer), and how many species (159).
+This number is obtained from rareifying the accumulation curve (obtained statistically, the number is exact, going back along the curve from the observed data).
+6.25 weight i guess cause that's the area?
 
 ```{r}
-# Number of trees per hectare
+# Find number of trees per hectare. 6.25 is the area of the plot in ha
 p6_density <- abd_sum(p6_abundances, as_numeric = TRUE) / 6.25
 # Richness
 p6_abundances %>% 
@@ -528,6 +604,12 @@ p6_abundances %>%
 ```
 
 Diversity of 10 ha in Paracou.
+This is now extrapolation - following the curve to the right, an estimated value.
+Can go up to 2 times the area for it to be more or less correct.
+Can use this to standardize data across variously sized datasets.
+allows to standardize at twice the size of the smallest plot, so you don't lose data from the larger plots.
+Only use this if plots are small.
+Otherwise, just use all your data to compute the asymptotic diversity.
 
 ```{r}
 # Richness
@@ -540,6 +622,9 @@ p6_abundances %>%
 ## Information function
 
 Information brought by an individual: $I(p_s) = \ln(1 / p_s)$.
+Information.
+= surprise = log(1/ps).
+But it doesn't actually represent the true surprise of rare species, soooo
 
 ```{r}
 ggplot() +
@@ -548,6 +633,10 @@ ggplot() +
   labs(x = "Probability", y = "Information")
 ```
 
+...you have to transform the function.
+We are actually most surprised and likely to encounter species that are low-intermediate.
+This maximizes probability of encounter with a species that is rare but not so rare that we don't learn something from it.
+The truly rarest of rare species won't tell us anything, cause they're SO rare.
 Information brought by a species: $p_s \ln(1 / p_s)$.
 
 ```{r}
@@ -558,7 +647,7 @@ ggplot() +
 
 ## Paracou 6
 
-Estimators.
+Shannon entropy estimators.
 
 ```{r}
 ent_shannon(p6_abundances, estimator = "naive") %>% 
@@ -569,6 +658,8 @@ ent_shannon(p6_abundances, estimator = "naive") %>%
 ```
 
 Effective number of species: $e^H$.
+This gives us a more intuitive way to compare, rather than the entropy number.
+Shows number of species by transforming to number of species
 
 ```{r}
 p6_shannon %>% 
@@ -697,7 +788,7 @@ div_hill(comm_dummy, q = 1, estimator = "naive")
 
 ## Asymptotic diversity
 
-Compare asymptotic diversity of Paracou and BCI, extend $q$.
+Compare asymptotic diversity of Paracou and BCI, extend $q$ from 0-2 by 0.1 (automatic) to 0-4.
 
 ```{r}
 # Orders from 0 to 4
@@ -709,9 +800,11 @@ profile_hill(p6_abundances, orders = q_seq_0_4) %>%
 
 ## Standardized diversity
 
-The sampling effort is very different: 50 ha in BCI, 6.25 ha in Paracou. The asymptotic estimation is less reliable in Paracou.
+The sampling effort is very different: 50 ha in BCI, 6.25 ha in Paracou.
+The asymptotic estimation is less reliable in Paracou.
 
 Compare diversity at the same sampling effort, say 10 ha.
+This is round, random, and less than 2 times the smallest plot (6.25)
 
 ```{r}
 # Number of trees in 10 ha
@@ -735,6 +828,7 @@ coverage(p6_abundances) %>%
 ```
 
 Compare diversity at the same sample coverage [@Chao2012b], that of Paracou.
+Could be done instead of at the same area.
 
 ```{r}
 reference_coverage <- coverage(p6_abundances, as_numeric = TRUE)
@@ -765,19 +859,25 @@ plot(mock_3sp_tree, direction = "downwards", srt = 90)
 axis(2)
 ```
 
-PD is the total length of branches
+PD is the total length of branches.
+Entropy is number of species -1.
+Diversity is entropy + 1
 
 ```{r}
 div_pd(mock_3sp_abd, tree = mock_3sp_tree)
 ```
 
 Rao.
+First count simpson's of each cluster, then find average value.
+Current entropy value is worng, cause of bug in divent package.
+should be updated October/November 2026
 
 ```{r}
 ent_rao(mock_3sp_abundances, tree = mock_3sp_tree, estimator = "naive")
 ```
 
-The tree is normalized to height = 1 by default. Without normalization:
+The tree is normalized to height = 1 by default.
+Without normalization:
 
 ```{r}
 ent_rao(
@@ -805,7 +905,9 @@ ent_rao(p6_abundances, tree = paracou_6_taxo) %>%
   )
 ```
 
-Rao's entropy is not an effective number of species, but the average phylogenetic distance between two individuals. The corresponding Hill number is:
+Rao's entropy is not an effective number of species, but the average phylogenetic distance between two individuals.
+It assumes same abundance per species and height = 1.
+The corresponding Hill number is:
 
 ```{r}
 div_phylo(p6_abundances, tree = paracou_6_taxo, q = 2)
@@ -822,7 +924,9 @@ profile_phylo(p6_abundances, tree = paracou_6_taxo) %>%
 
 ## Mock data
 
-The same mock data is used. Distances between species is now assumed to be in the trait space. Distances between species.
+The same mock data is used.
+Distances between species is now assumed to be in the trait space.
+Distances between species.
 
 ```{r}
 mock_3sp_dist
@@ -884,7 +988,9 @@ ent_similarity(
 
 ## Paracou 6
 
-The species traits are maximum height (95^th^ percentile) and seed mass, maximum height (95^th^ percentile) and seed mass. A distance matrix was built (see home practical). Distribution of distances between species.
+The species traits are maximum height (95^th^ percentile) and seed mass, maximum height (95^th^ percentile) and seed mass.
+A distance matrix was built (see home practical).
+Distribution of distances between species.
 
 ```{r}
 paracou_6_fundist %>% 
@@ -936,7 +1042,8 @@ mock_3sp_ind %>%
   coord_fixed()
 ```
 
-Diversity of the 6 individuals. First, without variability.
+Diversity of the 6 individuals.
+First, without variability.
 
 ```{r}
 # Choose variability
@@ -980,9 +1087,9 @@ Three habitats: A, B, C.
 ```{r}
 matrix(
   c(
-    0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 0, 1, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 1, 1, 1
+    0, 0, 0, 0, 0, 3, 3, 3, 3, 3,
+    3, 3, 3, 3, 3, 3, 0, 3, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 3, 3, 3
   ),
   nrow = 3, 
   byrow = TRUE
@@ -996,19 +1103,33 @@ matrix(
 ```
 
 Richness.
+Diversity here is just the number of species.
+Jackknife0 = naive, cause we don't have any single or doubletons.
+The metacommunity is the scale at which we compute gamma diversity.
+There are 10 species here, and we don't mind if they're common or not.
 
 ```{r}
-div_richness(mock_island_abd, estimator = "naive")
-div_richness(mock_island_abd, gamma = TRUE, estimator = "naive")
+div_richness(mock_island_abd)
+div_richness(mock_island_abd, gamma = TRUE)
 ```
 
 Multiplicative partitioning: 10 effective species ($\gamma$) = 5 effective species per habitat ($\alpha$) times 2 habitats ($\beta$).
+This is using Whittaker's formula, that if we have 10 total species (gamma) and 5 effective sps per habitat, then we should have 2 habitats $\beta$ = $\gamma$/$\alpha$.
+There are different datasets for which this could be true.
+we could also have 2 habitats with 5 distinct species each, and we would get the same diversity results.
+Weights are self ascribed and usually equal across habitats - generally we can use them as a marker of area, but if data includes number of trees the weight is included, and you can keep the weights the same.
+You might change your weights depending on how much you trust the data - more trust, greater weight.
 
 ```{r}
-div_part(mock_island_abd, q = 0, estimator = "naive")
+div_part(mock_island_abd, q = 0)
 ```
 
-Additive partitioning: 10 effective species ($\gamma$) = 5 effective species per habitat ($\alpha$) + 5 more species ($\beta$).
+Additive partitioning is a different way to approach these types of diversities, not Whittaker: 10 effective species ($\gamma$) = 5 effective species per habitat ($\alpha$) + 5 more species ($\beta$).
+
+Caused some controversy.
+But people generally are on team multiplicative partitioning, cause it makes more sense when considering entropy and diversity.
+So additive used for entropy, and multiplicative for diversity.
+Both work for richness.
 
 ## Paracou 6
 
@@ -1024,12 +1145,16 @@ paracou_6_abd %>%
 ### Partitioning
 
 Function `div_part()` computes $\alpha$, $\beta$ and $\gamma$ diversity.
+Gamma would be 1 if the plots all had exactly the same number of species (diversity).
 
 ```{r}
 div_part(paracou_6_abd, q = 1)
 ```
 
 ### Step by step
+
+To understand the behind the scenes of the function.
+Basically from entropy to estimators to diversity to alpha diversity, etc
 
 ```{r}
 # Alpha entropy
